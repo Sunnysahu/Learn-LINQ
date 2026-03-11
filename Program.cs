@@ -181,32 +181,78 @@ namespace Learn_LINQ
 
             // Example : Get students with marks greater than 70 AND age less than 25
 
-            var result = students.Where(student => student.Marks > 70 && student.Age < 22);
+            //var result = students.Where(student => student.Marks > 70 && student.Age < 22);
 
             // Example : Get students with marks greater than 70 OR age less than 25
 
-            var result2 = students.Where(student => student.Marks > 70 || student.Age < 22);
+            //var result2 = students.Where(student => student.Marks > 70 || student.Age < 22);
 
             // Example — String Filtering --> Get students whose name starts with 'S'
 
-            var result3 = students.Where(student => student.Name.StartsWith("s"));
+            //var result3 = students.Where(student => student.Name.StartsWith("s"));
 
             // Example -- Using Contains --> Name contains "a"
 
-            var result4 = students.Where(s => s.Name.Contains("a"));
+            //var result4 = students.Where(s => s.Name.Contains("a"));
 
             // Example -- Using EndsWith --> Name ends with "a"
-            var result5 = students.Where(s => s.Name.EndsWith("a"));
+            //var result5 = students.Where(s => s.Name.EndsWith("a"));
 
             // Example -- Using complex filtering --> Get students with marks greater than 70 AND age less than 25 OR name starts with 'S'
 
-            var result6 = students.Where(student => (student.Marks > 70 && student.Age < 25) || student.Name.StartsWith("S"));
+            //var result6 = students.Where(student => (student.Marks > 70 && student.Age < 25) || student.Name.StartsWith("S"));
+
+            // -------------------------------------------------------------------------------------------
+
+            // Select() in deep --> Selecting single column -- Selecting multiple columns -- Creating new objects -- Anonymous types -- Transforming data
+
+            // Example — Select Multiple Fields 
+
+            var multipleFieldNameandAge = students.Select(s => new
+            {
+                s.Name,
+                s.Age
+            });
+
+            // Example - Transform Data --> Add 10 bonus marks
+
+            var bonusMarks = students.Select(s => new 
+            {
+                Name = s.Name,
+                updatedMarks = s.Marks + 10
+            });
+
+            // Example — Create New Object
+
+            var studentResults = students.Select(s => new StudentResult
+            {
+                Name = s.Name,
+                Marks = s.Marks
+            });
+
+
+            // Example --> Combine Where() + Select() --> Students with Marks > 70 Return only their names
+
+            var studentResult = students.Where(s => s.Marks > 70).Select(s => s.Name);
+
+            // Example — Anonymous Types --> When you want to create a new type on the fly without defining a class for it. It is useful when you need to return a subset of properties or when you want to create a temporary object for a specific purpose.
+
+            var anonymousType = students.Select(s => new
+            {
+                StudentName = s.Name,
+                StudentMarks = s.Marks
+            });
+
 
             // -------------------------------------------------------------------------------------------
 
             // -------------------------------------------------------------------------------------------
             // -------------------------------------------------------------------------------------------
-            // -------------------------------------------------------------------------------------------
+        }
+        class StudentResult
+        {
+            public string Name { get; set; }
+            public int Marks { get; set; }
         }
     }
 }
