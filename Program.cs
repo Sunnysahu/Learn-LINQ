@@ -138,11 +138,18 @@ namespace Learn_LINQ
 
             // Any() → Check if data exists
 
-            bool anyStudentAbove21 = students.Any(student => student.Age > 30);
+            //bool anyStudentAbove21 = students.Any(student => student.Age > 30);
 
-            Console.WriteLine($"Is there any student above 21 years of age? {anyStudentAbove21}");
+            //Console.WriteLine($"Is there any student above 21 years of age? {anyStudentAbove21}");
             // -------------------------------------------------------------------------------------------
+
+            // All() → Check if all data satisfies a condition
+
+            bool marksGreaterThan50 = students.All(student => student.Marks > 100);
+            Console.WriteLine($"Do all students have marks greater than 50? {marksGreaterThan50}");
             // -------------------------------------------------------------------------------------------
+
+
             // -------------------------------------------------------------------------------------------
             // -------------------------------------------------------------------------------------------
         }
