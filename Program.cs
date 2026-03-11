@@ -105,13 +105,27 @@ namespace Learn_LINQ
 
             // Example: Instead of returning full student objects, return only Name.
 
-            var names = students.Select(s => s.Name);
-            foreach (var name in names)
-            {
-                Console.WriteLine($"Student Name : {name}");
-            }
+            //var names = students.Select(s => s.Name);
+            //foreach (var name in names)
+            //{
+            //    Console.WriteLine($"Student Name : {name}");
+            //}
 
+            //Example 2 : Dont Run this, added Courses property in Student class and added some courses for each student, now we want to get all courses of all students in a single list.
+
+            //class StudentCourse
+            //{
+            //    public string Name { get; set; }
+            //    public List<string> Courses { get; set; }
+            //}
+
+            //List<Student> students = new List<Student>
+            //{
+            //    new Student { Name="Sunny", Courses = new List<string>{"Math","Physics"} },
+            //    new Student { Name="Rahul", Courses = new List<string>{"Biology","Chemistry"} }
+            //};
             // -------------------------------------------------------------------------------------------
+
 
             // 
             // -------------------------------------------------------------------------------------------
