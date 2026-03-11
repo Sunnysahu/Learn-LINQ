@@ -290,49 +290,61 @@ namespace Learn_LINQ
 
             // Example: Get the first student with marks greater than 80
 
-            var studentGreaterThan80 = students.First(s => s.Marks > 80);
-            Console.WriteLine(studentGreaterThan80.Name);
+            //var studentGreaterThan80 = students.First(s => s.Marks > 80);
+            //Console.WriteLine(studentGreaterThan80.Name);
 
             // FirstOrDefault() --> Returns the first element that matches the condition. If no element exists → returns default value (null for reference types).
 
-            var studentGreaterThan100 = students.FirstOrDefault(s => s.Marks > 100);
+            //var studentGreaterThan100 = students.FirstOrDefault(s => s.Marks > 100);
 
-            if (studentGreaterThan100 != null)
-            {
-                Console.WriteLine(studentGreaterThan100.Name);
-            }
+            //if (studentGreaterThan100 != null)
+            //{
+            //    Console.WriteLine(studentGreaterThan100.Name);
+            //}
 
             // Single() --> Used when exactly one record must exist. If no element exists → exception occurs. If more than one element exists → exception occurs.
 
-            var singleStudent = students.Single(s => s.Marks == 90);
+            //var singleStudent = students.Single(s => s.Marks == 90);
 
-            Console.WriteLine(singleStudent.Name);
+            //Console.WriteLine(singleStudent.Name);
 
             // SingleOrDefault() --> Used when at most one record must exist. If no element exists → returns default value (null for reference types). If more than one element exists → exception occurs.
 
-            var studentSingleOrDefault = students.SingleOrDefault(s => s.Marks == 90);
-            if (studentSingleOrDefault != null)
-            {
-                Console.WriteLine(studentSingleOrDefault.Name);
-            }
+            //var studentSingleOrDefault = students.SingleOrDefault(s => s.Marks == 90);
+            //if (studentSingleOrDefault != null)
+            //{
+            //    Console.WriteLine(studentSingleOrDefault.Name);
+            //}
 
             // Last() --> Returns the last element that matches the condition. If no element exists → exception occurs.
 
-            var lastStudent = students.Last(s => s.Marks > 70);
+            //var lastStudent = students.Last(s => s.Marks > 70);
 
-            Console.WriteLine(lastStudent.Name);
+            //Console.WriteLine(lastStudent.Name);
 
             // LastOrDefault() --> Returns the last element that matches the condition. If no element exists → returns default value (null for reference types).
 
-            var lastStudentGreaterThan100 = students.LastOrDefault(s => s.Marks > 100);
+            //var lastStudentGreaterThan100 = students.LastOrDefault(s => s.Marks > 100);
 
-            if (lastStudentGreaterThan100 != null) Console.WriteLine(lastStudentGreaterThan100.Name);
+            //if (lastStudentGreaterThan100 != null) Console.WriteLine(lastStudentGreaterThan100.Name);
 
+            // -------------------------------------------------------------------------------------------
+
+            // Contains --> Check if a collection contains a specific element. It is used to determine if a particular value exists in a collection.
+
+
+            var names = students.Select(s => s.Name);
+
+            foreach (var name in names)
+            {
+                Console.WriteLine(name);
+            }
+
+            bool containsName = students.Select(s => s.Name.ToLower()).Contains("sunny");
+            Console.Write(containsName); // True
+        // -------------------------------------------------------------------------------------------
         }
 
-        // -------------------------------------------------------------------------------------------
-
-
 
         // -------------------------------------------------------------------------------------------
         // -------------------------------------------------------------------------------------------
@@ -340,8 +352,7 @@ namespace Learn_LINQ
         // -------------------------------------------------------------------------------------------
         // -------------------------------------------------------------------------------------------
         // -------------------------------------------------------------------------------------------
-        // -------------------------------------------------------------------------------------------
-    class StudentResult
+        class StudentResult
         {
             public string Name { get; set; }
             public int Marks { get; set; }
