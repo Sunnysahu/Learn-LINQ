@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -160,22 +161,49 @@ namespace Learn_LINQ
             //var studentFirst = students.FirstOrDefault(s => s.Marks >= 100);
 
             //Console.WriteLine(studentFirst?.Name ?? "No student found with marks greater than or equal to 100"); 
-            
+
             // Returns null if no student found with marks greater than or equal to 100, and we use null-coalescing operator to handle the null case and provide a default message.
             // -------------------------------------------------------------------------------------------
 
             // Question -> Students then Filter marks > 70 then Take only Name then Convert to List
 
-            var studentMarksGreaterThan70 = students.Where(student => student.Marks > 70).
-                Select(student => student.Name).ToList();
+            //var studentMarksGreaterThan70 = students.Where(student => student.Marks > 70).
+            //    Select(student => student.Name).ToList();
 
-            foreach(var student in studentMarksGreaterThan70)
-            {
-                Console.WriteLine($"Name : {student}");
-            }
+            //foreach(var student in studentMarksGreaterThan70)
+            //{
+            //    Console.WriteLine($"Name : {student}");
+            //}
 
             // -------------------------------------------------------------------------------------------
+
+            // Where with multiple conditions -- Where with AND / OR -- Where with string functions -- Where with complex filtering -- Query vs Method syntax
+
+            // Example : Get students with marks greater than 70 AND age less than 25
+
+            var result = students.Where(student => student.Marks > 70 && student.Age < 22);
+
+            // Example : Get students with marks greater than 70 OR age less than 25
+
+            var result2 = students.Where(student => student.Marks > 70 || student.Age < 22);
+
+            // Example — String Filtering --> Get students whose name starts with 'S'
+
+            var result3 = students.Where(student => student.Name.StartsWith("s"));
+
+            // Example -- Using Contains --> Name contains "a"
+
+            var result4 = students.Where(s => s.Name.Contains("a"));
+
+            // Example -- Using EndsWith --> Name ends with "a"
+            var result5 = students.Where(s => s.Name.EndsWith("a"));
+
+            // Example -- Using complex filtering --> Get students with marks greater than 70 AND age less than 25 OR name starts with 'S'
+
+            var result6 = students.Where(student => (student.Marks > 70 && student.Age < 25) || student.Name.StartsWith("S"));
+
             // -------------------------------------------------------------------------------------------
+
             // -------------------------------------------------------------------------------------------
             // -------------------------------------------------------------------------------------------
             // -------------------------------------------------------------------------------------------
