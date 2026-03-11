@@ -126,8 +126,17 @@ namespace Learn_LINQ
             //};
             // -------------------------------------------------------------------------------------------
 
+            // ToList() --> when you want to execute the query and get the results as a List. It is used to materialize the query results into a concrete collection.
 
-            // 
+            var studentAge = students.Where(student => student.Age > 21).ToList();
+            foreach (var student in studentAge)
+            {
+                Console.WriteLine($"Students above 21 years of age: {student.Id} {student.Name} {student.Age} {student.Marks}");
+            }
+
+            // -------------------------------------------------------------------------------------------
+
+
             // -------------------------------------------------------------------------------------------
             // -------------------------------------------------------------------------------------------
             // -------------------------------------------------------------------------------------------
