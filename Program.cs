@@ -250,63 +250,98 @@ namespace Learn_LINQ
 
             // OrderBy() --> Sort Ascending
 
-            var sort = students.OrderBy(x => x.Marks);
-
-            foreach (var student in sort)
-            {
-                Console.WriteLine($"Sorted by Id: {student.Id} {student.Name} {student.Age} {student.Marks}");
-            }
+            //var sort = students.OrderBy(x => x.Marks);
 
             // OrderByDescending() --> Sort Descending
 
-            var sortDescending = students.OrderByDescending(x => x.Marks);
-            foreach (var student in sortDescending)
-            {
-                Console.WriteLine($"Sorted by Id: {student.Id} {student.Name} {student.Age} {student.Marks}");
-            }
+            //var sortDescending = students.OrderByDescending(x => x.Marks);
 
             // Sorting Strings --> Sort by Name Ascending
 
-            var sortByName = students.OrderBy(s => s.Name);
-            foreach (var student in sortByName)
-            {
-                Console.WriteLine($"Sorted by Name: {student.Id} {student.Name} {student.Age} {student.Marks}");
-            }
+            //var sortByName = students.OrderBy(s => s.Name);
 
             // ThenBy() --> Multiple Sorting --> Sort by Marks Ascending and then by Age Ascending
             // Primary sort → Marks and If same marks → Age
 
-            var sortByMarksThenAge = students.OrderBy(s => s.Marks).ThenBy(s => s.Age);
-
-            foreach (var student in sortByMarksThenAge)
-            {
-                Console.WriteLine($"Sorted by Marks then Age: {student.Id} {student.Name} {student.Age} {student.Marks}");
-            }
+            //var sortByMarksThenAge = students.OrderBy(s => s.Marks).ThenBy(s => s.Age);
 
             // Descending + Second Sort --> Sort by Marks Descending and then by Age Ascending
 
-            var sortByMarksDescendingThenAge = students.OrderByDescending(s => s.Marks).ThenBy(s => s.Age);
+            //var sortByMarksDescendingThenAge = students.OrderByDescending(s => s.Marks).ThenBy(s => s.Age);
 
             // Sorting After Filtering --> Get students with marks greater than 70 and sort by Age Descending
 
-            var filteredAndSorted = students.Where(s => s.Marks > 70).OrderByDescending(s => s.Age);
+            //var filteredAndSorted = students.Where(s => s.Marks > 70).OrderByDescending(s => s.Age);
 
             // Sorting After Select --> Get names and Marks of students and sort by Marks
 
-            var nameAndMarksSortedByName = students.Select(s => new { s.Name, s.Marks }).OrderBy(s => s.Marks);
+            //var nameAndMarksSortedByName = students.Select(s => new { s.Name, s.Marks }).OrderBy(s => s.Marks);
 
             // ThenByDescending() --> Sort by Marks Ascending and then by Age Descending
 
-            var sortByMarksThenAgeDescending = students.OrderBy(s => s.Marks).ThenByDescending(s => s.Age);
+            //var sortByMarksThenAgeDescending = students.OrderBy(s => s.Marks).ThenByDescending(s => s.Age);
 
             // -------------------------------------------------------------------------------------------
 
 
+            // Element Operators in LINQ --> First() -- FirstOrDefault() -- Last() -- LastOrDefault() -- Single() -- SingleOrDefault()
 
+            // First() --> Returns the first element that matches the condition. If no element exists → exception occurs.
 
-            // -------------------------------------------------------------------------------------------
+            // Example: Get the first student with marks greater than 80
+
+            var studentGreaterThan80 = students.First(s => s.Marks > 80);
+            Console.WriteLine(studentGreaterThan80.Name);
+
+            // FirstOrDefault() --> Returns the first element that matches the condition. If no element exists → returns default value (null for reference types).
+
+            var studentGreaterThan100 = students.FirstOrDefault(s => s.Marks > 100);
+
+            if (studentGreaterThan100 != null)
+            {
+                Console.WriteLine(studentGreaterThan100.Name);
+            }
+
+            // Single() --> Used when exactly one record must exist. If no element exists → exception occurs. If more than one element exists → exception occurs.
+
+            var singleStudent = students.Single(s => s.Marks == 90);
+
+            Console.WriteLine(singleStudent.Name);
+
+            // SingleOrDefault() --> Used when at most one record must exist. If no element exists → returns default value (null for reference types). If more than one element exists → exception occurs.
+
+            var studentSingleOrDefault = students.SingleOrDefault(s => s.Marks == 90);
+            if (studentSingleOrDefault != null)
+            {
+                Console.WriteLine(studentSingleOrDefault.Name);
+            }
+
+            // Last() --> Returns the last element that matches the condition. If no element exists → exception occurs.
+
+            var lastStudent = students.Last(s => s.Marks > 70);
+
+            Console.WriteLine(lastStudent.Name);
+
+            // LastOrDefault() --> Returns the last element that matches the condition. If no element exists → returns default value (null for reference types).
+
+            var lastStudentGreaterThan100 = students.LastOrDefault(s => s.Marks > 100);
+
+            if (lastStudentGreaterThan100 != null) Console.WriteLine(lastStudentGreaterThan100.Name);
+
         }
-        class StudentResult
+
+        // -------------------------------------------------------------------------------------------
+
+
+
+        // -------------------------------------------------------------------------------------------
+        // -------------------------------------------------------------------------------------------
+        // -------------------------------------------------------------------------------------------
+        // -------------------------------------------------------------------------------------------
+        // -------------------------------------------------------------------------------------------
+        // -------------------------------------------------------------------------------------------
+        // -------------------------------------------------------------------------------------------
+    class StudentResult
         {
             public string Name { get; set; }
             public int Marks { get; set; }
