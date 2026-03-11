@@ -151,15 +151,32 @@ namespace Learn_LINQ
 
             // First() --> Get the first element that satisfies a condition. If no such element exists, it throws an exception.
 
-            var student = students.First(s => s.Marks >= 80); // Returns Single Value
+            // var student = students.First(s => s.Marks >= 80); // Returns Single Value
 
-            Console.WriteLine(student.Name); // Throws Exception if no student found with marks greater than or equal to 80
+            // Console.WriteLine(student.Name); // Throws Exception if no student found with marks greater than or equal to 80
 
             // FirstOrDefault() --> Get the first element that satisfies a condition. If no such element exists, it returns the default value (null for reference types).
 
-            var studentFirst = students.FirstOrDefault(s => s.Marks >= 100);
+            //var studentFirst = students.FirstOrDefault(s => s.Marks >= 100);
 
-            Console.WriteLine(studentFirst?.Name ?? "No student found with marks greater than or equal to 100"); // Returns null if no student found with marks greater than or equal to 100, and we use null-coalescing operator to handle the null case and provide a default message.
+            //Console.WriteLine(studentFirst?.Name ?? "No student found with marks greater than or equal to 100"); 
+            
+            // Returns null if no student found with marks greater than or equal to 100, and we use null-coalescing operator to handle the null case and provide a default message.
+            // -------------------------------------------------------------------------------------------
+
+            // Question -> Students then Filter marks > 70 then Take only Name then Convert to List
+
+            var studentMarksGreaterThan70 = students.Where(student => student.Marks > 70).
+                Select(student => student.Name).ToList();
+
+            foreach(var student in studentMarksGreaterThan70)
+            {
+                Console.WriteLine($"Name : {student}");
+            }
+
+            // -------------------------------------------------------------------------------------------
+            // -------------------------------------------------------------------------------------------
+            // -------------------------------------------------------------------------------------------
             // -------------------------------------------------------------------------------------------
             // -------------------------------------------------------------------------------------------
         }
