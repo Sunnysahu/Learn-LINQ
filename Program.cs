@@ -53,10 +53,11 @@ namespace Learn_LINQ
             //{
             //Console.WriteLine($"Students above 21 years of age: {student.Id} {student.Name} {student.Age} {student.Marks}");
 
-                // from s in students -> data source
-                // where condition -> filter
-                // select s        -> output
+            // from s in students -> data source
+            // where condition -> filter
+            // select s        -> output
             //}
+
             //-------------------------------------------------------------------------------------------
 
             // Method Syntax : Get students age > 21
@@ -71,18 +72,52 @@ namespace Learn_LINQ
 
             //Console.ForegroundColor = ConsoleColor.Green;
 
+            // ------------------------------------------------------------
+
             // Collection → Filter → Transform → Flatten → Aggregate → Materialize || students → Where() → Select() → ToList()
 
             // WHERE --> Filter the collection based on a condition 
             // Example: Get students with marks greater than 80
 
-            var studentsWithMarksGreaterThan80 = students.Where(student => student.Marks > 80).ToList();
+            //var studentsWithMarksGreaterThan80 = students.Where(student => student.Marks > 80).ToList();
 
-            foreach (var student in studentsWithMarksGreaterThan80)
+            //foreach (var student in studentsWithMarksGreaterThan80)
+            //{
+            //    Console.WriteLine($"Students with marks greater than 80: {student.Id} {student.Name} {student.Age} {student.Marks}");
+            //}
+
+            // ------------------------------------------------------------
+
+            // SELECT --> Use Select when you want to pick specific fields or create a new shape.
+
+            // Example: Get the names of all students Only (Normall it returns whole data of each student after filtering but here we want only names)
+
+            var studentNames = students.Select(student => student.Name);
+            foreach (var name in studentNames)
             {
-                Console.WriteLine($"Students with marks greater than 80: {student.Id} {student.Name} {student.Age} {student.Marks}");
+                Console.WriteLine($"Student Name: {name}");
             }
 
+            //var names = students.Where(s => s.Name.Length > 4).Select(s=> new { s.Id, s.Name });
+            //Console.WriteLine(names);
+            //foreach (var name in names)
+            //{
+            //    Console.WriteLine($"Student Name with length greater than 5: {name.Id} {name.Name}");
+            //}
+
+
+
+
+
+            // ------------------------------------------------------------
+
+            //3.SelectMany() --> Use SelectMany when you have a collection of collections and you want to flatten it into a single collection.
+
+
+            // ------------------------------------------------------------
+            // ------------------------------------------------------------
+            // ------------------------------------------------------------
+            // ------------------------------------------------------------
         }
     }
 }
