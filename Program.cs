@@ -71,13 +71,7 @@ namespace Learn_LINQ
 
             Console.ForegroundColor = ConsoleColor.Green;
 
-            // Collection → Filter → Transform → Flatten → Aggregate → Materialize || students → Where() → Select() → ToList()
 
-            // WHERE --> Filter the collection based on a condition 
-            // Example: Get students with marks greater than 80
-
-            var studentsWithMarksGreaterThan80 = students.Where(student => student.Marks > 80).ToList();
-            Console.WriteLine($"{studentsWithMarksGreaterThan80}");
         }
     }
 }
