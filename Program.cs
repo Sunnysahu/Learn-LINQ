@@ -61,16 +61,27 @@ namespace Learn_LINQ
 
             // Method Syntax : Get students age > 21
 
-            var studentAbove21Method = students.Where(student => student.Age > 21);
-            foreach (var student in studentAbove21Method)
+            //var studentAbove21Method = students.Where(student => student.Age > 21);
+            //foreach (var student in studentAbove21Method)
+            //{
+            //    Console.WriteLine($"Students above 21 years of age: {student.Id} {student.Name} {student.Age} {student.Marks}");
+
+            //    // Where() -> filter method and student => student.Age > 21->lambda expression
+            //}
+
+            //Console.ForegroundColor = ConsoleColor.Green;
+
+            // Collection → Filter → Transform → Flatten → Aggregate → Materialize || students → Where() → Select() → ToList()
+
+            // WHERE --> Filter the collection based on a condition 
+            // Example: Get students with marks greater than 80
+
+            var studentsWithMarksGreaterThan80 = students.Where(student => student.Marks > 80).ToList();
+
+            foreach (var student in studentsWithMarksGreaterThan80)
             {
-                Console.WriteLine($"Students above 21 years of age: {student.Id} {student.Name} {student.Age} {student.Marks}");
-
-                // Where() -> filter method and student => student.Age > 21->lambda expression
+                Console.WriteLine($"Students with marks greater than 80: {student.Id} {student.Name} {student.Age} {student.Marks}");
             }
-
-            Console.ForegroundColor = ConsoleColor.Green;
-
 
         }
     }
