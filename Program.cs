@@ -145,11 +145,21 @@ namespace Learn_LINQ
 
             // All() → Check if all data satisfies a condition
 
-            bool marksGreaterThan50 = students.All(student => student.Marks > 100);
-            Console.WriteLine($"Do all students have marks greater than 50? {marksGreaterThan50}");
+            //bool marksGreaterThan50 = students.All(student => student.Marks > 100);
+            //Console.WriteLine($"Do all students have marks greater than 50? {marksGreaterThan50}");
             // -------------------------------------------------------------------------------------------
 
+            // First() --> Get the first element that satisfies a condition. If no such element exists, it throws an exception.
 
+            var student = students.First(s => s.Marks >= 80); // Returns Single Value
+
+            Console.WriteLine(student.Name); // Throws Exception if no student found with marks greater than or equal to 80
+
+            // FirstOrDefault() --> Get the first element that satisfies a condition. If no such element exists, it returns the default value (null for reference types).
+
+            var studentFirst = students.FirstOrDefault(s => s.Marks >= 100);
+
+            Console.WriteLine(studentFirst?.Name ?? "No student found with marks greater than or equal to 100"); // Returns null if no student found with marks greater than or equal to 100, and we use null-coalescing operator to handle the null case and provide a default message.
             // -------------------------------------------------------------------------------------------
             // -------------------------------------------------------------------------------------------
         }
