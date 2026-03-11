@@ -35,7 +35,15 @@ namespace Learn_LINQ
             
             // Query Syntax : Get students age > 21
 
+            var studentAbove21 = from student in students where student.Age > 21 select student;
+                
+            foreach(var student in studentAbove21)
+            {
+            Console.WriteLine($"Students above 21 years of age: {student.Id} {student.Name} {student.Age} {student.Marks}");
 
+            }
+
+          
         }
 
 
