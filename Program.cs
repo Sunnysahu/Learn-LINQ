@@ -4,7 +4,6 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
-using System.Xml.Linq;
 
 namespace Learn_LINQ
 {
@@ -59,7 +58,7 @@ namespace Learn_LINQ
             // select s        -> output
             //}
 
-            // -------------------------------------------------------------------------------------------
+            //-------------------------------------------------------------------------------------------
 
             // Method Syntax : Get students age > 21
 
@@ -73,7 +72,7 @@ namespace Learn_LINQ
 
             //Console.ForegroundColor = ConsoleColor.Green;
 
-            // -------------------------------------------------------------------------------------------
+            // ------------------------------------------------------------
 
             // Collection → Filter → Transform → Flatten → Aggregate → Materialize || students → Where() → Select() → ToList()
 
@@ -87,36 +86,38 @@ namespace Learn_LINQ
             //    Console.WriteLine($"Students with marks greater than 80: {student.Id} {student.Name} {student.Age} {student.Marks}");
             //}
 
-            // -------------------------------------------------------------------------------------------
+            // ------------------------------------------------------------
 
             // SELECT --> Use Select when you want to pick specific fields or create a new shape.
 
             // Example: Get the names of all students Only (Normall it returns whole data of each student after filtering but here we want only names)
 
-            //var studentNames = students.Select(student => student.Name);
-            //foreach (var name in studentNames)
-            //{
-            //    Console.WriteLine($"Student Name: {name}");
-            //}
-
-            // -------------------------------------------------------------------------------------------
-
-            // SelectMany() --> Use SelectMany when you have a collection of collections and you want to flatten it into a single collection.
-
-            // Example: Instead of returning full student objects, return only Name.
-
-            var names = students.Select(s => s.Name);
-            foreach (var name in names)
+            var studentNames = students.Select(student => student.Name);
+            foreach (var name in studentNames)
             {
-                Console.WriteLine($"Student Name : {name}");
+                Console.WriteLine($"Student Name: {name}");
             }
 
+            //var names = students.Where(s => s.Name.Length > 4).Select(s=> new { s.Id, s.Name });
+            //Console.WriteLine(names);
+            //foreach (var name in names)
+            //{
+            //    Console.WriteLine($"Student Name with length greater than 5: {name.Id} {name.Name}");
+            //}
 
-            // -------------------------------------------------------------------------------------------
-            // -------------------------------------------------------------------------------------------
-            // -------------------------------------------------------------------------------------------
-            // -------------------------------------------------------------------------------------------
-            // -------------------------------------------------------------------------------------------
+
+
+
+
+            // ------------------------------------------------------------
+
+            //3.SelectMany() --> Use SelectMany when you have a collection of collections and you want to flatten it into a single collection.
+
+
+            // ------------------------------------------------------------
+            // ------------------------------------------------------------
+            // ------------------------------------------------------------
+            // ------------------------------------------------------------
         }
     }
 }
