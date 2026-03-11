@@ -208,45 +208,100 @@ namespace Learn_LINQ
 
             // Example — Select Multiple Fields 
 
-            var multipleFieldNameandAge = students.Select(s => new
-            {
-                s.Name,
-                s.Age
-            });
+            //var multipleFieldNameandAge = students.Select(s => new
+            //{
+            //    s.Name,
+            //    s.Age
+            //});
 
             // Example - Transform Data --> Add 10 bonus marks
 
-            var bonusMarks = students.Select(s => new 
-            {
-                Name = s.Name,
-                updatedMarks = s.Marks + 10
-            });
+            //var bonusMarks = students.Select(s => new 
+            //{
+            //    Name = s.Name,
+            //    updatedMarks = s.Marks + 10
+            //});
 
             // Example — Create New Object
 
-            var studentResults = students.Select(s => new StudentResult
-            {
-                Name = s.Name,
-                Marks = s.Marks
-            });
+            //var studentResults = students.Select(s => new StudentResult
+            //{
+            //    Name = s.Name,
+            //    Marks = s.Marks
+            //});
 
 
             // Example --> Combine Where() + Select() --> Students with Marks > 70 Return only their names
 
-            var studentResult = students.Where(s => s.Marks > 70).Select(s => s.Name);
+            //var studentResult = students.Where(s => s.Marks > 70).Select(s => s.Name);
 
             // Example — Anonymous Types --> When you want to create a new type on the fly without defining a class for it. It is useful when you need to return a subset of properties or when you want to create a temporary object for a specific purpose.
 
-            var anonymousType = students.Select(s => new
+            //var anonymousType = students.Select(s => new
+            //{
+            //    StudentName = s.Name,
+            //    StudentMarks = s.Marks
+            //});
+
+
+            // -------------------------------------------------------------------------------------------
+
+            // OrderBy() and OrderByDescending() --> Sorting in LINQ -- Multiple sorting -- ThenBy() -- ThenByDescending()
+
+            // OrderBy() --> Sort Ascending
+
+            var sort = students.OrderBy(x => x.Marks);
+
+            foreach (var student in sort)
             {
-                StudentName = s.Name,
-                StudentMarks = s.Marks
-            });
+                Console.WriteLine($"Sorted by Id: {student.Id} {student.Name} {student.Age} {student.Marks}");
+            }
 
+            // OrderByDescending() --> Sort Descending
+
+            var sortDescending = students.OrderByDescending(x => x.Marks);
+            foreach (var student in sortDescending)
+            {
+                Console.WriteLine($"Sorted by Id: {student.Id} {student.Name} {student.Age} {student.Marks}");
+            }
+
+            // Sorting Strings --> Sort by Name Ascending
+
+            var sortByName = students.OrderBy(s => s.Name);
+            foreach (var student in sortByName)
+            {
+                Console.WriteLine($"Sorted by Name: {student.Id} {student.Name} {student.Age} {student.Marks}");
+            }
+
+            // ThenBy() --> Multiple Sorting --> Sort by Marks Ascending and then by Age Ascending
+            // Primary sort → Marks and If same marks → Age
+
+            var sortByMarksThenAge = students.OrderBy(s => s.Marks).ThenBy(s => s.Age);
+
+            foreach (var student in sortByMarksThenAge)
+            {
+                Console.WriteLine($"Sorted by Marks then Age: {student.Id} {student.Name} {student.Age} {student.Marks}");
+            }
+
+            // Descending + Second Sort --> Sort by Marks Descending and then by Age Ascending
+
+            var sortByMarksDescendingThenAge = students.OrderByDescending(s => s.Marks).ThenBy(s => s.Age);
+
+            // Sorting After Filtering --> Get students with marks greater than 70 and sort by Age Descending
+
+            var filteredAndSorted = students.Where(s => s.Marks > 70).OrderByDescending(s => s.Age);
+
+            // Sorting After Select --> Get names and Marks of students and sort by Marks
+
+            var nameAndMarksSortedByName = students.Select(s => new { s.Name, s.Marks }).OrderBy(s => s.Marks);
+
+            // ThenByDescending() --> Sort by Marks Ascending and then by Age Descending
+
+            var sortByMarksThenAgeDescending = students.OrderBy(s => s.Marks).ThenByDescending(s => s.Age);
 
             // -------------------------------------------------------------------------------------------
 
-            // -------------------------------------------------------------------------------------------
+
             // -------------------------------------------------------------------------------------------
         }
         class StudentResult
