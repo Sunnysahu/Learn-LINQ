@@ -348,22 +348,78 @@ namespace Learn_LINQ
 
             // Take() – Take First N Elements
 
-            var firstThreeStudents = students.Take(3);
+            //var firstThreeStudents = students.Take(3);
 
             // Skip() – Skip First N Elements (Used when you want to ignore the first N elements)
 
-            var skipTwoStudents = students.Skip(2);
+            //var skipTwoStudents = students.Skip(2);
 
             // Take() + Skip() (Pagination) – Take 3 elements after skipping first 2 elements
             // Page size = 2 -- Page number = 2
 
-            var pagination = students.Skip(2).Take(3);
+            //var pagination = students.Skip(2).Take(3);
 
             // TakeWhile() – Take Until Condition Fails (When condition becomes false → stop)
 
-            var result = students.TakeWhile(s => s.Marks < 85);
+            //var takeWhileMarksGreaterThan70 = students.TakeWhile(s => s.Marks > 70);
+
+            // SkipWhile() – Skip Until Condition Fails (When condition becomes false → start taking elements)
+
+            //var skipWhileMarksGreaterThan70 = students.SkipWhile(s => s.Marks > 70);
+
+            // Real Example of Pagination --> Get page number 2 with page size 2
+
+            //int pageNumber = 2;
+            //int pageSize = 2;
+
+            //var result = students
+            //            .OrderBy(s => s.Id)
+            //            .Skip((pageNumber - 1) * pageSize)
+            //            .Take(pageSize)
+            //            .ToList();
 
             // -------------------------------------------------------------------------------------------
+
+            //Aggregation Operators --> Count() -- Sum() -- Average() -- Min() -- Max()
+
+            // Count() --> Total Number of Elements
+
+            int totalStudents = students.Count();
+
+            Console.WriteLine(totalStudents);
+
+            // Count with Condition --> Get number of students with marks greater than 70
+            int countMarksGreaterThan70 = students.Count(s => s.Marks > 70);
+            Console.WriteLine(countMarksGreaterThan70);
+
+            // Sum() --> Get total marks of all students
+
+            int totalMarks = students.Sum(s => s.Marks);
+
+            Console.WriteLine(totalMarks);
+
+            // Average() --> Get average marks of all students
+
+            double averageMarks = students.Average(s => s.Marks);
+            Console.WriteLine(averageMarks);
+
+            // Min() --> Get minimum marks
+
+            int minMarks = students.Min(s => s.Marks);
+            Console.WriteLine(minMarks);
+
+            // Max() --> Get maximum marks
+
+            int maxMarks = students.Max(s => s.Marks);
+            Console.WriteLine(maxMarks);
+
+
+            // Aggregation After Filtering --> Average marks of students with Age > 21
+
+            double avgMark21 = students.Where(s => s.Age> 21).Average(s => s.Marks);
+            Console.WriteLine(avgMark21);
+
+            // 
             // -------------------------------------------------------------------------------------------
             // -------------------------------------------------------------------------------------------
             // -------------------------------------------------------------------------------------------
