@@ -333,16 +333,16 @@ namespace Learn_LINQ
             // Contains --> Check if a collection contains a specific element. It is used to determine if a particular value exists in a collection.
 
 
-            var names = students.Select(s => s.Name);
+            //var names = students.Select(s => s.Name);
 
-            foreach (var name in names)
-            {
-                Console.WriteLine(name);
-            }
+            //foreach (var name in names)
+            //{
+            //    Console.WriteLine(name);
+            //}
 
-            bool containsName = students.Select(s => s.Name.ToLower()).Contains("sunny");
-            Console.Write(containsName); // True
-            // -------------------------------------------------------------------------------------------
+            //bool containsName = students.Select(s => s.Name.ToLower()).Contains("sunny");
+            //Console.Write(containsName); // True
+            //-------------------------------------------------------------------------------------------
 
             // Partitioning Operators --> Take() -- Skip() -- TakeWhile() -- SkipWhile()
 
@@ -384,43 +384,99 @@ namespace Learn_LINQ
 
             // Count() --> Total Number of Elements
 
-            int totalStudents = students.Count();
+            //int totalStudents = students.Count();
 
-            Console.WriteLine(totalStudents);
+            //Console.WriteLine(totalStudents);
 
-            // Count with Condition --> Get number of students with marks greater than 70
-            int countMarksGreaterThan70 = students.Count(s => s.Marks > 70);
-            Console.WriteLine(countMarksGreaterThan70);
+            //// Count with Condition --> Get number of students with marks greater than 70
+            //int countMarksGreaterThan70 = students.Count(s => s.Marks > 70);
+            //Console.WriteLine(countMarksGreaterThan70);
 
-            // Sum() --> Get total marks of all students
+            //// Sum() --> Get total marks of all students
 
-            int totalMarks = students.Sum(s => s.Marks);
+            //int totalMarks = students.Sum(s => s.Marks);
 
-            Console.WriteLine(totalMarks);
+            //Console.WriteLine(totalMarks);
 
-            // Average() --> Get average marks of all students
+            //// Average() --> Get average marks of all students
 
-            double averageMarks = students.Average(s => s.Marks);
-            Console.WriteLine(averageMarks);
+            //double averageMarks = students.Average(s => s.Marks);
+            //Console.WriteLine(averageMarks);
 
-            // Min() --> Get minimum marks
+            //// Min() --> Get minimum marks
 
-            int minMarks = students.Min(s => s.Marks);
-            Console.WriteLine(minMarks);
+            //int minMarks = students.Min(s => s.Marks);
+            //Console.WriteLine(minMarks);
 
-            // Max() --> Get maximum marks
+            //// Max() --> Get maximum marks
 
-            int maxMarks = students.Max(s => s.Marks);
-            Console.WriteLine(maxMarks);
+            //int maxMarks = students.Max(s => s.Marks);
+            //Console.WriteLine(maxMarks);
 
 
-            // Aggregation After Filtering --> Average marks of students with Age > 21
+            //// Aggregation After Filtering --> Average marks of students with Age > 21
 
-            double avgMark21 = students.Where(s => s.Age> 21).Average(s => s.Marks);
-            Console.WriteLine(avgMark21);
+            //double avgMark21 = students.Where(s => s.Age > 21).Average(s => s.Marks);
+            //Console.WriteLine(avgMark21);
 
-            // 
+
             // -------------------------------------------------------------------------------------------
+
+            // GroupBy() -> Grouping data based on a key. It is used to group elements that share a common attribute.
+
+            // Example: Group students by Age
+
+            var groupByAge = students.GroupBy(s => s.Age);
+            foreach (var group in groupByAge)
+            {
+                Console.WriteLine($"Age Group: {group.Key}");
+                foreach (var student in group)
+                {
+                    Console.WriteLine($"    {student.Name} - Marks: {student.Marks}");
+                }
+            }
+
+            // GroupBy with Select() --> Group students by Age andReturn Age and StudentCount
+
+            var groupByAgeWithSelect = students.GroupBy(s => s.Age)
+                .Select(g => new
+                {
+                    Age = g.Key,
+                    StudentCount = g.Count()
+                });
+
+            foreach (var group in groupByAgeWithSelect)
+            {
+                Console.WriteLine($"Age: {group.Age}, Student Count: {group.StudentCount}");
+            }
+
+            // GroupBy with Aggregation --> Group students by Age and get average marks for each age group
+
+            var groupByAgeWithAverageMarks = students.GroupBy(s => s.Age)
+                .Select(g => new
+                {
+                    Age = g.Key,
+                    AverageMarks = g.Average(s => s.Marks)
+                });
+
+            foreach (var group in groupByAgeWithAverageMarks)
+            {
+                Console.WriteLine($"Age: {group.Age}, Average Marks: {group.AverageMarks}");
+            }
+
+            // GroupBy with Filtering --> Group students by Age and Show only groups where Count > 1
+
+            var groupByAgeWithCountGreaterThan1 = students.GroupBy(s => s.Age).Where(c => c.Count() > 1); 
+
+            foreach (var group in groupByAgeWithCountGreaterThan1)
+            {
+                Console.WriteLine($"Age Group: {group.Key}, Student Count: {group.Count()}");
+                foreach (var student in group)
+                {
+                    Console.WriteLine($"    {student.Name} - Marks: {student.Marks}");
+                }
+            }
+
             // -------------------------------------------------------------------------------------------
             // -------------------------------------------------------------------------------------------
         }
