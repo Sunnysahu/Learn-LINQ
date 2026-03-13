@@ -11,14 +11,6 @@ namespace Learn_LINQ
 {
     internal class Program
     {
-        private class Student
-        {
-            public int Id { get; set; }
-            public string Name { get; set; }
-            public int Age { get; set; }
-            public int Marks { get; set; }
-        }
-
         private static void Main(string[] args)
         {
             Console.Title = "Student Management Console"; // Working till Execution Happening
@@ -78,7 +70,7 @@ namespace Learn_LINQ
 
             // Collection → Filter → Transform → Flatten → Aggregate → Materialize || students → Where() → Select() → ToList()
 
-            // WHERE --> Filter the collection based on a condition 
+            // WHERE --> Filter the collection based on a condition
             // Example: Get students with marks greater than 80
 
             //var studentsWithMarksGreaterThan80 = students.Where(student => student.Marks > 80).ToList();
@@ -160,7 +152,7 @@ namespace Learn_LINQ
 
             //var studentFirst = students.FirstOrDefault(s => s.Marks >= 100);
 
-            //Console.WriteLine(studentFirst?.Name ?? "No student found with marks greater than or equal to 100"); 
+            //Console.WriteLine(studentFirst?.Name ?? "No student found with marks greater than or equal to 100");
 
             // Returns null if no student found with marks greater than or equal to 100, and we use null-coalescing operator to handle the null case and provide a default message.
             // -------------------------------------------------------------------------------------------
@@ -206,7 +198,7 @@ namespace Learn_LINQ
 
             // Select() in deep --> Selecting single column -- Selecting multiple columns -- Creating new objects -- Anonymous types -- Transforming data
 
-            // Example — Select Multiple Fields 
+            // Example — Select Multiple Fields
 
             //var multipleFieldNameandAge = students.Select(s => new
             //{
@@ -216,7 +208,7 @@ namespace Learn_LINQ
 
             // Example - Transform Data --> Add 10 bonus marks
 
-            //var bonusMarks = students.Select(s => new 
+            //var bonusMarks = students.Select(s => new
             //{
             //    Name = s.Name,
             //    updatedMarks = s.Marks + 10
@@ -230,7 +222,6 @@ namespace Learn_LINQ
             //    Marks = s.Marks
             //});
 
-
             // Example --> Combine Where() + Select() --> Students with Marks > 70 Return only their names
 
             //var studentResult = students.Where(s => s.Marks > 70).Select(s => s.Name);
@@ -242,7 +233,6 @@ namespace Learn_LINQ
             //    StudentName = s.Name,
             //    StudentMarks = s.Marks
             //});
-
 
             // -------------------------------------------------------------------------------------------
 
@@ -282,7 +272,6 @@ namespace Learn_LINQ
             //var sortByMarksThenAgeDescending = students.OrderBy(s => s.Marks).ThenByDescending(s => s.Age);
 
             // -------------------------------------------------------------------------------------------
-
 
             // Element Operators in LINQ --> First() -- FirstOrDefault() -- Last() -- LastOrDefault() -- Single() -- SingleOrDefault()
 
@@ -331,7 +320,6 @@ namespace Learn_LINQ
             // -------------------------------------------------------------------------------------------
 
             // Contains --> Check if a collection contains a specific element. It is used to determine if a particular value exists in a collection.
-
 
             //var names = students.Select(s => s.Name);
 
@@ -413,12 +401,10 @@ namespace Learn_LINQ
             //int maxMarks = students.Max(s => s.Marks);
             //Console.WriteLine(maxMarks);
 
-
             //// Aggregation After Filtering --> Average marks of students with Age > 21
 
             //double avgMark21 = students.Where(s => s.Age > 21).Average(s => s.Marks);
             //Console.WriteLine(avgMark21);
-
 
             // -------------------------------------------------------------------------------------------
 
@@ -426,68 +412,150 @@ namespace Learn_LINQ
 
             // Example: Group students by Age
 
-            var groupByAge = students.GroupBy(s => s.Age);
-            foreach (var group in groupByAge)
+            //var groupByAge = students.GroupBy(s => s.Age);
+            //foreach (var group in groupByAge)
+            //{
+            //    Console.WriteLine($"Age Group: {group.Key}");
+            //    foreach (var student in group)
+            //    {
+            //        Console.WriteLine($"    {student.Name} - Marks: {student.Marks}");
+            //    }
+            //}
+
+            //// GroupBy with Select() --> Group students by Age andReturn Age and StudentCount
+
+            //var groupByAgeWithSelect = students.GroupBy(s => s.Age)
+            //    .Select(g => new
+            //    {
+            //        Age = g.Key,
+            //        StudentCount = g.Count()
+            //    });
+
+            //foreach (var group in groupByAgeWithSelect)
+            //{
+            //    Console.WriteLine($"Age: {group.Age}, Student Count: {group.StudentCount}");
+            //}
+
+            //// GroupBy with Aggregation --> Group students by Age and get average marks for each age group
+
+            //var groupByAgeWithAverageMarks = students.GroupBy(s => s.Age)
+            //    .Select(g => new
+            //    {
+            //        Age = g.Key,
+            //        AverageMarks = g.Average(s => s.Marks)
+            //    });
+
+            //foreach (var group in groupByAgeWithAverageMarks)
+            //{
+            //    Console.WriteLine($"Age: {group.Age}, Average Marks: {group.AverageMarks}");
+            //}
+
+            //// GroupBy with Filtering --> Group students by Age and Show only groups where Count > 1
+
+            //var groupByAgeWithCountGreaterThan1 = students.GroupBy(s => s.Age).Where(c => c.Count() > 1);
+
+            //foreach (var group in groupByAgeWithCountGreaterThan1)
+            //{
+            //    Console.WriteLine($"Age Group: {group.Key}, Student Count: {group.Count()}");
+            //    foreach (var student in group)
+            //    {
+            //        Console.WriteLine($"    {student.Name} - Marks: {student.Marks}");
+            //    }
+            //}
+
+            //----------------------------------------------------------------------------------
+
+            List<StudentDetails> StudentWithCourse = new List<StudentDetails>()
             {
-                Console.WriteLine($"Age Group: {group.Key}");
-                foreach (var student in group)
+                new StudentDetails{ Id=1, Name="Sunny", Age=25, Marks=80, Courses=new List<string>{"Math","Physics"} },
+                new StudentDetails{ Id=2, Name="Rahul", Age=20, Marks=65, Courses=new List<string>{"Biology"} },
+                new StudentDetails{ Id=3, Name="Amit", Age=23, Marks=90, Courses=new List<string>{"Math","Chemistry"} },
+                new StudentDetails{ Id=4, Name="Neha", Age=22, Marks=70, Courses=new List<string>{"Physics"} },
+                new StudentDetails{ Id=5, Name="Priya", Age=19, Marks=85, Courses=new List<string>{"Math","Biology"} }
+            };
+
+            // SelectMany() --> Flattening a collection of collections into a single collection. It is used when you have a collection of collections and you want to work with the individual elements.
+
+            // Example: Get all courses of all students in a single list
+
+            // Problem Without SelectMany() --> It returns List<List<string>> because Courses is a List<string> and we are selecting it for each student, so we get a list of lists.
+
+            var allCourses = StudentWithCourse.Select(c => c.Courses);
+
+            foreach (var courseList in allCourses)
+            {
+                foreach (var course in courseList)
                 {
-                    Console.WriteLine($"    {student.Name} - Marks: {student.Marks}");
+                    Console.WriteLine($"Courses : {course}");
                 }
             }
 
-            // GroupBy with Select() --> Group students by Age andReturn Age and StudentCount
+            // Solution with SelectMany() --> It flattens the List<List<string>> into a single List<string>
 
-            var groupByAgeWithSelect = students.GroupBy(s => s.Age)
-                .Select(g => new
-                {
-                    Age = g.Key,
-                    StudentCount = g.Count()
-                });
-
-            foreach (var group in groupByAgeWithSelect)
+            var allCoursesSelectMany = StudentWithCourse.SelectMany(c => c.Courses);
+            foreach (var course in allCoursesSelectMany)
             {
-                Console.WriteLine($"Age: {group.Age}, Student Count: {group.StudentCount}");
+                Console.WriteLine($"Courses : {course}");
             }
 
-            // GroupBy with Aggregation --> Group students by Age and get average marks for each age group
+            // QUESTION : Problem Without SelectMany()
 
-            var groupByAgeWithAverageMarks = students.GroupBy(s => s.Age)
-                .Select(g => new
-                {
-                    Age = g.Key,
-                    AverageMarks = g.Average(s => s.Marks)
-                });
-
-            foreach (var group in groupByAgeWithAverageMarks)
+            var studentCourse = StudentWithCourse.SelectMany(s => s.Courses, (student, course) => new
             {
-                Console.WriteLine($"Age: {group.Age}, Average Marks: {group.AverageMarks}");
+                student.Name,
+                Course = course
+            });
+
+            foreach (var sc in studentCourse)
+            {
+                Console.WriteLine($"Student: {sc.Name}, Course: {sc.Course}");
             }
 
-            // GroupBy with Filtering --> Group students by Age and Show only groups where Count > 1
+            // Filtering After Flattening -- Students taking Math
 
-            var groupByAgeWithCountGreaterThan1 = students.GroupBy(s => s.Age).Where(c => c.Count() > 1); 
-
-            foreach (var group in groupByAgeWithCountGreaterThan1)
+            var studentsTakingMath = StudentWithCourse.SelectMany(s => s.Courses, (student, courses) => new
             {
-                Console.WriteLine($"Age Group: {group.Key}, Student Count: {group.Count()}");
-                foreach (var student in group)
-                {
-                    Console.WriteLine($"    {student.Name} - Marks: {student.Marks}");
-                }
+                student.Name,
+                Course = courses
+            }).Where(c => c.Course == "Math");
+
+
+            // Get all unique courses
+
+            var uniqueCourses = StudentWithCourse.SelectMany(c => c.Courses).Distinct();
+
+            foreach (var course in uniqueCourses)
+            {
+                Console.WriteLine($"Unique Course: {course}");
             }
 
-            // -------------------------------------------------------------------------------------------
-            // -------------------------------------------------------------------------------------------
+
+            //----------------------------------------------------------------------------------
         }
 
+        private class Student
+        {
+            public int Age { get; set; }
+            public int Id { get; set; }
+            public int Marks { get; set; }
+            public string Name { get; set; }
+        }
+
+        private class StudentDetails
+        {
+            public int Age { get; set; }
+            public List<string> Courses { get; set; }
+            public int Id { get; set; }
+            public int Marks { get; set; }
+            public string Name { get; set; }
+        }
 
         // -------------------------------------------------------------------------------------------
         // -------------------------------------------------------------------------------------------
-        class StudentResult
+        private class StudentResult
         {
-            public string Name { get; set; }
             public int Marks { get; set; }
+            public string Name { get; set; }
         }
     }
 }
