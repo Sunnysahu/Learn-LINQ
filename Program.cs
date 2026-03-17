@@ -564,59 +564,96 @@ namespace Learn_LINQ
 
             // Question: Get student names along with their department names
 
-            var innerJoinResult = studentCollection.Join(departmentCollection, student => student.DeptId, dept => dept.DeptId, (student, dept) => new
-            {
-                student.Name,
-                dept.DeptName
-            });
+            //var innerJoinResult = studentCollection.Join(departmentCollection, student => student.DeptId, dept => dept.DeptId, (student, dept) => new
+            //{
+            //    student.Name,
+            //    dept.DeptName
+            //});
 
-            foreach (var item in innerJoinResult)
-            {
-                Console.WriteLine($"Student: {item.Name}, Department: {item.DeptName}");
-            }
+            //foreach (var item in innerJoinResult)
+            //{
+            //    Console.WriteLine($"Student: {item.Name}, Department: {item.DeptName}");
+            //}
 
-            // QUERY SYNTAX FOR JOIN
-            var joinedResult =
-            from student in studentCollection
-            join dept in departmentCollection
-            on student.DeptId equals dept.DeptId
-            select new
+            //// QUERY SYNTAX FOR JOIN
+            //var joinedResult =
+            //from student in studentCollection
+            //join dept in departmentCollection
+            //on student.DeptId equals dept.DeptId
+            //select new
+            //{
+            //    student.Name,
+            //    dept.DeptName
+            //};
+
+            ////Filtering After Join --> Get students with their department names where department is "Science"
+
+            //var filteredJoinResult = studentCollection.Join(departmentCollection, student => student.DeptId, dept => dept.DeptId, (student, dept) => new
+            //{
+            //    student.Name,
+            //    dept.DeptName
+            //}).Where(d => d.DeptName.ToLower() == "science");
+
+            //foreach (var item in filteredJoinResult) {
+            //    Console.WriteLine($"Student: {item.Name}, Department: {item.DeptName}");
+            //}
+
+            //// Join + Sorting --> Sort students by department
+
+            //var sortedJoinResult = studentCollection.Join(departmentCollection, student => student.DeptId, dept => dept.DeptId, (student, dept) => new
+            //{
+            //    student.Id,
+            //    student.Name,
+            //    dept.DeptName
+            //}).OrderBy(x => x.DeptName);
+
+            //foreach (var item in sortedJoinResult)
+            //{
+            //    Console.WriteLine($"Student: {item.Name}, Department: {item.DeptName}");
+            //}
+            //--------------------------------------------------------------------------------------------
+
+            List<UniversityStudent> universityRoster = new List<UniversityStudent>()
             {
-                student.Name,
-                dept.DeptName
+                new UniversityStudent{ Id=1, Name="Sunny", DeptId=1 },
+                new UniversityStudent{ Id=2, Name="Rahul", DeptId=2 },
+                new UniversityStudent{ Id=3, Name="Amit", DeptId=1 },
+                new UniversityStudent{ Id=4, Name="Neha", DeptId=5 } // department does not exist
             };
 
-            //Filtering After Join --> Get students with their department names where department is "Science"
-
-            var filteredJoinResult = studentCollection.Join(departmentCollection, student => student.DeptId, dept => dept.DeptId, (student, dept) => new
+            List<FacultyDepartment> facultyDirectory = new List<FacultyDepartment>()
             {
-                student.Name,
-                dept.DeptName
-            }).Where(d => d.DeptName.ToLower() == "science");
+                new FacultyDepartment{ DeptId=1, DeptName="Science" },
+                new FacultyDepartment{ DeptId=2, DeptName="Commerce" },
+                new FacultyDepartment{ DeptId=3, DeptName="Arts" }
+            };
 
+            // GroupJoin --> 
 
-            foreach (var item in filteredJoinResult) {
-                Console.WriteLine($"Student: {item.Name}, Department: {item.DeptName}");
-            }
+            // Left Join Both Tables
 
+            var leftJoinResult =
+            universityRoster
+            .GroupJoin(
+                facultyDirectory,
+                student => student.DeptId,
+                dept => dept.DeptId,
+                (student, deptGroup) => new
+                {
+                    student,
+                    deptGroup
+                })
+            .SelectMany(
+                x => x.deptGroup.DefaultIfEmpty(),
+                (x, dept) => new
+                {
+                    x.student.Name,
+                    DepartmentName = dept?.DeptName
+                });
 
-            // Join + Sorting --> Sort students by department
-
-            var sortedJoinResult = studentCollection.Join(departmentCollection, student => student.DeptId, dept => dept.DeptId, (student, dept) => new
-            {
-                student.Id,
-                student.Name,
-                dept.DeptName
-            }).OrderBy(x => x.DeptName);
-
-            foreach (var item in sortedJoinResult)
-            {
-                Console.WriteLine($"Student: {item.Name}, Department: {item.DeptName}");
-            }
-            //---------------------------------------------------------------------------------------
+            // -------------------------------------------------------------------------------------------
         }
 
-        // -------------------------------------------------------------------------------------------
         // -------------------------------------------------------------------------------------------
 
         private class Student
@@ -650,6 +687,19 @@ namespace Learn_LINQ
         }
 
         private class Department
+        {
+            public int DeptId { get; set; }
+            public string DeptName { get; set; }
+        }
+
+        private class UniversityStudent
+        {
+            public int Id { get; set; }
+            public string Name { get; set; }
+            public int DeptId { get; set; }
+        }
+
+        private class FacultyDepartment
         {
             public int DeptId { get; set; }
             public string DeptName { get; set; }

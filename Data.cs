@@ -33,4 +33,15 @@ internal class StudentCourse
         };
 }
 
+Select() – choose fields / projection
+Where() – filter records
+OrderBy() – sort ascending
+OrderByDescending() – sort descending
+ThenBy() – secondary sorting ascending
+ThenByDescending() – secondary sorting descending
+GroupBy() – group records
+Join() – join two collections
+GroupJoin() – grouped join (one-to-many)
+
+from → join → let → where → orderby → group → into → select
 */
