@@ -629,7 +629,7 @@ namespace Learn_LINQ
             //    new FacultyDepartment{ DeptId=3, DeptName="Arts" }
             //};
 
-            //// GroupJoin --> 
+            //// GroupJoin -->
 
             //// Left Join Both Tables
 
@@ -656,51 +656,119 @@ namespace Learn_LINQ
 
             // Deferred Execution(Lazy Execution) --> Query is NOT executed immediately. It runs only when you iterate(loop) or use the data
 
-            var result = students.Where(s => s.Age > 18);
+            //var result = students.Where(s => s.Age > 18);
 
-            // Query NOT executed yet
+            //// Query NOT executed yet
 
-            foreach (var s in result)
+            //foreach (var s in result)
+            //{
+            //    Console.WriteLine(s.Name); // Executed here
+            //}
+
+            //// Immediate Execution --> Query is executed immediately and Result is stored in memory
+
+            //var result2 = students
+            //.Where(s => s.Age > 18)
+            //.ToList(); // Executed here
+
+            //List<ProductItem> inventoryList = new List<ProductItem>()
+            //{
+            //    new ProductItem{ Id=1, Name="A", Price=100 },
+            //    new ProductItem{ Id=2, Name="B", Price=500 }
+            //};
+
+            //// Case 1: Deferred Execution
+            //var expensiveItems = inventoryList.Where(x => x.Price > 200);
+
+            //inventoryList.Add(new ProductItem { Id = 3, Name = "C", Price = 1000 });
+
+            //foreach (var item in expensiveItems)
+            //{
+            //    Console.WriteLine("Items : "+ item.Name); // OUTPUT --> B and C
+            //}
+
+            //// Case 2: Immediate Execution
+
+            //var expensiveItems2 = inventoryList.Where(x => x.Price > 200).ToList();
+
+            //inventoryList.Add(new ProductItem { Id = 4, Name = "D", Price = 4000 });
+            //foreach (var item in expensiveItems2)
+            //{
+            //    Console.WriteLine("Items 2 :" + item.Name); // OUTPUT --> B and C
+            //}
+
+            // -------------------------------------------------------------------------------------------
+
+            // LINQ Projection(Select Advanced) --> Projection means: Transforming data into a new shape
+
+            List<UserProfile> profileStore = new List<UserProfile>()
             {
-                Console.WriteLine(s.Name); // Executed here
-            }
-
-
-            // Immediate Execution --> Query is executed immediately and Result is stored in memory
-
-            var result2 = students
-            .Where(s => s.Age > 18)
-            .ToList(); // Executed here
-
-            List<ProductItem> inventoryList = new List<ProductItem>()
-            {
-                new ProductItem{ Id=1, Name="A", Price=100 },
-                new ProductItem{ Id=2, Name="B", Price=500 }
+                new UserProfile{ Id=1, Name="Sunny", Email="sunny@gmail.com", Age=25, Salary=50000 },
+                new UserProfile{ Id=2, Name="Rahul", Email="rahul@gmail.com", Age=20, Salary=30000 },
+                new UserProfile{ Id=3, Name="Amit", Email="amit@gmail.com", Age=23, Salary=70000 }
             };
 
-            // Case 1: Deferred Execution
-            var expensiveItems = inventoryList.Where(x => x.Price > 200);
 
-            inventoryList.Add(new ProductItem { Id = 3, Name = "C", Price = 1000 });
+            // 1. Basic Projection (Select) - Get only Name
 
-            foreach (var item in expensiveItems)
+            var names = profileStore.Select(x => x.Name);
+
+            foreach (var name in names)
             {
-                Console.WriteLine("Items : "+ item.Name); // OUTPUT --> B and C
+                Console.WriteLine(name);
             }
 
-            // Case 2: Immediate Execution
+            // 2. Projection to New Object (Anonymous Type) - Name + Age only
 
-            var expensiveItems2 = inventoryList.Where(x => x.Price > 200).ToList();
-
-
-            inventoryList.Add(new ProductItem { Id = 4, Name = "D", Price = 4000 });
-            foreach (var item in expensiveItems2)
+            var nameAndAge = profileStore.Select(x =>
+            new
             {
-                Console.WriteLine("Items 2 :" + item.Name); // OUTPUT --> B and C
+               Name = x.Name,
+               Age = x.Age
+            });
+
+            foreach (var name in nameAndAge)
+            {
+                Console.WriteLine($"Name and Age : "+ name);
+            }
+
+            //4. Projection with Calculation - Name + Salary after bonus (10%)
+
+            var nameAndSalary = profileStore.Select(x => new
+            {
+                Name = x.Name,
+                NewSalary = x.Salary + (x.Salary * 0.10)
+            });
+
+            foreach (var name in nameAndSalary)
+            {
+                Console.WriteLine(name);
             }
 
 
+            // 4. Projection into DTO (VERY IMPORTANT)
+            // Instead of anonymous type, we create a class. In real APIs:
 
+            // We NEVER send full database model Example: UserProfile has Email, Salary(sensitive data) But API returns: Name + Age only
+
+            var result = profileStore
+            .Select(x => new UserDTO
+            {
+                Name = x.Name,
+                Age = x.Age
+            });
+
+            //5.Filtering + Projection
+
+            var result = profileStore
+            .Where(x => x.Age > 21)
+            .Select(x => new
+            {
+                x.Name,
+                x.Age
+            });
+
+            // -------------------------------------------------------------------------------------------
             // -------------------------------------------------------------------------------------------
         }
 
@@ -760,6 +828,21 @@ namespace Learn_LINQ
             public int Id { get; set; }
             public string Name { get; set; }
             public int Price { get; set; }
+        }
+
+        class UserProfile
+        {
+            public int Id { get; set; }
+            public string Name { get; set; }
+            public string Email { get; set; }
+            public int Age { get; set; }
+            public int Salary { get; set; }
+        }
+
+        class UserDTO
+        {
+            public string Name { get; set; }
+            public int Age { get; set; }
         }
     }
 }
