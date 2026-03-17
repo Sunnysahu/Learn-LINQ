@@ -1,4 +1,5 @@
 ﻿using System;
+using System.CodeDom.Compiler;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -613,43 +614,92 @@ namespace Learn_LINQ
             //}
             //--------------------------------------------------------------------------------------------
 
-            List<UniversityStudent> universityRoster = new List<UniversityStudent>()
+            //List<UniversityStudent> universityRoster = new List<UniversityStudent>()
+            //{
+            //    new UniversityStudent{ Id=1, Name="Sunny", DeptId=1 },
+            //    new UniversityStudent{ Id=2, Name="Rahul", DeptId=2 },
+            //    new UniversityStudent{ Id=3, Name="Amit", DeptId=1 },
+            //    new UniversityStudent{ Id=4, Name="Neha", DeptId=5 } // department does not exist
+            //};
+
+            //List<FacultyDepartment> facultyDirectory = new List<FacultyDepartment>()
+            //{
+            //    new FacultyDepartment{ DeptId=1, DeptName="Science" },
+            //    new FacultyDepartment{ DeptId=2, DeptName="Commerce" },
+            //    new FacultyDepartment{ DeptId=3, DeptName="Arts" }
+            //};
+
+            //// GroupJoin --> 
+
+            //// Left Join Both Tables
+
+            //var leftJoinResult =
+            //universityRoster
+            //.GroupJoin(
+            //    facultyDirectory,
+            //    student => student.DeptId,
+            //    dept => dept.DeptId,
+            //    (student, deptGroup) => new
+            //    {
+            //        student,
+            //        deptGroup
+            //    })
+            //.SelectMany(
+            //    x => x.deptGroup.DefaultIfEmpty(),
+            //    (x, dept) => new
+            //    {
+            //        x.student.Name,
+            //        DepartmentName = dept?.DeptName
+            //    });
+
+            // -------------------------------------------------------------------------------------------
+
+            // Deferred Execution(Lazy Execution) --> Query is NOT executed immediately. It runs only when you iterate(loop) or use the data
+
+            var result = students.Where(s => s.Age > 18);
+
+            // Query NOT executed yet
+
+            foreach (var s in result)
             {
-                new UniversityStudent{ Id=1, Name="Sunny", DeptId=1 },
-                new UniversityStudent{ Id=2, Name="Rahul", DeptId=2 },
-                new UniversityStudent{ Id=3, Name="Amit", DeptId=1 },
-                new UniversityStudent{ Id=4, Name="Neha", DeptId=5 } // department does not exist
+                Console.WriteLine(s.Name); // Executed here
+            }
+
+
+            // Immediate Execution --> Query is executed immediately and Result is stored in memory
+
+            var result2 = students
+            .Where(s => s.Age > 18)
+            .ToList(); // Executed here
+
+            List<ProductItem> inventoryList = new List<ProductItem>()
+            {
+                new ProductItem{ Id=1, Name="A", Price=100 },
+                new ProductItem{ Id=2, Name="B", Price=500 }
             };
 
-            List<FacultyDepartment> facultyDirectory = new List<FacultyDepartment>()
+            // Case 1: Deferred Execution
+            var expensiveItems = inventoryList.Where(x => x.Price > 200);
+
+            inventoryList.Add(new ProductItem { Id = 3, Name = "C", Price = 1000 });
+
+            foreach (var item in expensiveItems)
             {
-                new FacultyDepartment{ DeptId=1, DeptName="Science" },
-                new FacultyDepartment{ DeptId=2, DeptName="Commerce" },
-                new FacultyDepartment{ DeptId=3, DeptName="Arts" }
-            };
+                Console.WriteLine("Items : "+ item.Name); // OUTPUT --> B and C
+            }
 
-            // GroupJoin --> 
+            // Case 2: Immediate Execution
 
-            // Left Join Both Tables
+            var expensiveItems2 = inventoryList.Where(x => x.Price > 200).ToList();
 
-            var leftJoinResult =
-            universityRoster
-            .GroupJoin(
-                facultyDirectory,
-                student => student.DeptId,
-                dept => dept.DeptId,
-                (student, deptGroup) => new
-                {
-                    student,
-                    deptGroup
-                })
-            .SelectMany(
-                x => x.deptGroup.DefaultIfEmpty(),
-                (x, dept) => new
-                {
-                    x.student.Name,
-                    DepartmentName = dept?.DeptName
-                });
+
+            inventoryList.Add(new ProductItem { Id = 4, Name = "D", Price = 4000 });
+            foreach (var item in expensiveItems2)
+            {
+                Console.WriteLine("Items 2 :" + item.Name); // OUTPUT --> B and C
+            }
+
+
 
             // -------------------------------------------------------------------------------------------
         }
@@ -703,6 +753,13 @@ namespace Learn_LINQ
         {
             public int DeptId { get; set; }
             public string DeptName { get; set; }
+        }
+
+        public class ProductItem
+        {
+            public int Id { get; set; }
+            public string Name { get; set; }
+            public int Price { get; set; }
         }
     }
 }
