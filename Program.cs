@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Net.NetworkInformation;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -709,64 +710,111 @@ namespace Learn_LINQ
             };
 
 
-            // 1. Basic Projection (Select) - Get only Name
+            //// 1. Basic Projection (Select) - Get only Name
 
-            var names = profileStore.Select(x => x.Name);
+            //var names = profileStore.Select(x => x.Name);
 
-            foreach (var name in names)
+            //foreach (var name in names)
+            //{
+            //    Console.WriteLine(name);
+            //}
+
+            //// 2. Projection to New Object (Anonymous Type) - Name + Age only
+
+            //var nameAndAge = profileStore.Select(x =>
+            //new
+            //{
+            //   Name = x.Name,
+            //   Age = x.Age
+            //});
+
+            //foreach (var name in nameAndAge)
+            //{
+            //    Console.WriteLine($"Name and Age : "+ name);
+            //}
+
+            ////4. Projection with Calculation - Name + Salary after bonus (10%)
+
+            //var nameAndSalary = profileStore.Select(x => new
+            //{
+            //    Name = x.Name,
+            //    NewSalary = x.Salary + (x.Salary * 0.10)
+            //});
+
+            //foreach (var name in nameAndSalary)
+            //{
+            //    Console.WriteLine(name);
+            //}
+
+
+            //// 4. Projection into DTO (VERY IMPORTANT)
+            //// Instead of anonymous type, we create a class. In real APIs:
+
+            //// We NEVER send full database model Example: UserProfile has Email, Salary(sensitive data) But API returns: Name + Age only
+
+            //var result = profileStore
+            //.Select(x => new UserDTO
+            //{
+            //    Name = x.Name,
+            //    Age = x.Age
+            //});
+
+            //// 5.Filtering + Projection
+
+            //var result2 = profileStore
+            //.Where(x => x.Age > 21)
+            //.Select(x => new
+            //{
+            //    x.Name,
+            //    x.Age
+            //});
+
+            // -------------------------------------------------------------------------------------------
+
+            //LINQ Sorting + Paging --> Sorting data (ASC / DESC) -- Pagination(page 1, page 2…) -- Top records
+
+            List<ProductCatalog> catalogData = new List<ProductCatalog>()
             {
-                Console.WriteLine(name);
-            }
+                new ProductCatalog{ Id=1, Name="Laptop", Price=70000, Rating=4.5 },
+                new ProductCatalog{ Id=2, Name="Mobile", Price=30000, Rating=4.2 },
+                new ProductCatalog{ Id=3, Name="Tablet", Price=40000, Rating=4.7 },
+                new ProductCatalog{ Id=4, Name="Headphones", Price=2000, Rating=4.0 },
+                new ProductCatalog{ Id=5, Name="Monitor", Price=15000, Rating=4.3 }
+            };
 
-            // 2. Projection to New Object (Anonymous Type) - Name + Age only
+            // 1. Sorting(OrderBy) and Descending
 
-            var nameAndAge = profileStore.Select(x =>
-            new
-            {
-               Name = x.Name,
-               Age = x.Age
-            });
+            var resultAesc = catalogData.OrderBy(x => x.Price); // O/P -> low → high
 
-            foreach (var name in nameAndAge)
-            {
-                Console.WriteLine($"Name and Age : "+ name);
-            }
+            var resultDesc = catalogData.OrderByDescending(x => x.Price);
 
-            //4. Projection with Calculation - Name + Salary after bonus (10%)
+            // 2. Multiple Sorting (ThenBy) --> Sort by Rating DESC, then Price ASC
 
-            var nameAndSalary = profileStore.Select(x => new
-            {
-                Name = x.Name,
-                NewSalary = x.Salary + (x.Salary * 0.10)
-            });
+            var multipleSort = catalogData.OrderByDescending(x => x.Rating).ThenBy(x => x.Price);
 
-            foreach (var name in nameAndSalary)
-            {
-                Console.WriteLine(name);
-            }
+            // 3. Top Records (Take) --> Top 3 expensive products
+
+            var topRecord = catalogData.OrderByDescending(x => x.Price).Take(3);
+
+            // 4. Skip (Ignore Records) --> Skip (Ignore Records)
+
+            var skip = catalogData.Select(x => x.Price).Skip(3);
+
+            // 5. Pagination (Skip + Take) 
+
+            // PageNumber = 2
+            // PageSize = 2
+            // Skip = (PageNumber - 1) * PageSize
+
+            int pageNumber = 2;
+            int pageSize = 2;
+
+            var result = catalogData
+                        .OrderBy(x => x.Id)
+                        .Skip((pageNumber - 1) * pageSize)
+                        .Take(pageSize);
 
 
-            // 4. Projection into DTO (VERY IMPORTANT)
-            // Instead of anonymous type, we create a class. In real APIs:
-
-            // We NEVER send full database model Example: UserProfile has Email, Salary(sensitive data) But API returns: Name + Age only
-
-            var result = profileStore
-            .Select(x => new UserDTO
-            {
-                Name = x.Name,
-                Age = x.Age
-            });
-
-            //5.Filtering + Projection
-
-            var result = profileStore
-            .Where(x => x.Age > 21)
-            .Select(x => new
-            {
-                x.Name,
-                x.Age
-            });
 
             // -------------------------------------------------------------------------------------------
             // -------------------------------------------------------------------------------------------
@@ -843,6 +891,14 @@ namespace Learn_LINQ
         {
             public string Name { get; set; }
             public int Age { get; set; }
+        }
+
+        class ProductCatalog
+        {
+            public int Id { get; set; }
+            public string Name { get; set; }
+            public double Price { get; set; }
+            public double Rating { get; set; }
         }
     }
 }
