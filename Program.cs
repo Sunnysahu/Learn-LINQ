@@ -3,9 +3,11 @@ using System.CodeDom.Compiler;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Net.NetworkInformation;
+using System.Runtime.Remoting.Contexts;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -773,49 +775,135 @@ namespace Learn_LINQ
 
             //LINQ Sorting + Paging --> Sorting data (ASC / DESC) -- Pagination(page 1, page 2…) -- Top records
 
-            List<ProductCatalog> catalogData = new List<ProductCatalog>()
+            //List<ProductCatalog> catalogData = new List<ProductCatalog>()
+            //{
+            //    new ProductCatalog{ Id=1, Name="Laptop", Price=70000, Rating=4.5 },
+            //    new ProductCatalog{ Id=2, Name="Mobile", Price=30000, Rating=4.2 },
+            //    new ProductCatalog{ Id=3, Name="Tablet", Price=40000, Rating=4.7 },
+            //    new ProductCatalog{ Id=4, Name="Headphones", Price=2000, Rating=4.0 },
+            //    new ProductCatalog{ Id=5, Name="Monitor", Price=15000, Rating=4.3 }
+            //};
+
+            //// 1. Sorting(OrderBy) and Descending
+
+            //var resultAesc = catalogData.OrderBy(x => x.Price); // O/P -> low → high
+
+            //var resultDesc = catalogData.OrderByDescending(x => x.Price);
+
+            //// 2. Multiple Sorting (ThenBy) --> Sort by Rating DESC, then Price ASC
+
+            //var multipleSort = catalogData.OrderByDescending(x => x.Rating).ThenBy(x => x.Price);
+
+            //// 3. Top Records (Take) --> Top 3 expensive products
+
+            //var topRecord = catalogData.OrderByDescending(x => x.Price).Take(3);
+
+            //// 4. Skip (Ignore Records) --> Skip (Ignore Records)
+
+            //var skip = catalogData.Select(x => x.Price).Skip(3);
+
+            //// 5. Pagination (Skip + Take) 
+
+            //// PageNumber = 2
+            //// PageSize = 2
+            //// Skip = (PageNumber - 1) * PageSize
+
+            //int pageNumber = 2;
+            //int pageSize = 2;
+
+            //var result = catalogData
+            //            .OrderBy(x => x.Id)
+            //            .Skip((pageNumber - 1) * pageSize)
+            //            .Take(pageSize);
+
+
+            // -------------------------------------------------------------------------------------------
+
+            // LINQ Performance + Best Practices
+
+            List<OrderRecord> salesRegister = new List<OrderRecord>()
             {
-                new ProductCatalog{ Id=1, Name="Laptop", Price=70000, Rating=4.5 },
-                new ProductCatalog{ Id=2, Name="Mobile", Price=30000, Rating=4.2 },
-                new ProductCatalog{ Id=3, Name="Tablet", Price=40000, Rating=4.7 },
-                new ProductCatalog{ Id=4, Name="Headphones", Price=2000, Rating=4.0 },
-                new ProductCatalog{ Id=5, Name="Monitor", Price=15000, Rating=4.3 }
+                new OrderRecord{ Id=1, Customer="Sunny", Amount=500 },
+                new OrderRecord{ Id=2, Customer="Rahul", Amount=200 },
+                new OrderRecord{ Id=3, Customer="Amit", Amount=900 },
+                new OrderRecord{ Id=4, Customer="Neha", Amount=300 },
+                new OrderRecord{ Id=5, Customer="Priya", Amount=700 }
             };
 
-            // 1. Sorting(OrderBy) and Descending
+            // 1. Most Common Mistake — ToList() Too Early
 
-            var resultAesc = catalogData.OrderBy(x => x.Price); // O/P -> low → high
+            var result = salesRegister
+                        .Where(x => x.Amount > 300)
+                        .ToList();
+            // 2. Multiple Enumeration Problem
 
-            var resultDesc = catalogData.OrderByDescending(x => x.Price);
+            var data = salesRegister
+                       .Where(x => x.Amount > 300)
+                       .ToList();   // execute once
+            // 3.Use Any() Instead of Count()
 
-            // 2. Multiple Sorting (ThenBy) --> Sort by Rating DESC, then Price ASC
+            bool exists = salesRegister.Any(x => x.Amount > 800);
 
-            var multipleSort = catalogData.OrderByDescending(x => x.Rating).ThenBy(x => x.Price);
+            // 4. Filtering After Projection(Bad Order)
 
-            // 3. Top Records (Take) --> Top 3 expensive products
+            // Wrong
 
-            var topRecord = catalogData.OrderByDescending(x => x.Price).Take(3);
+            var resultWrong = salesRegister
+                        .Select(x => new { x.Customer, x.Amount })
+                        .Where(x => x.Amount > 300);
 
-            // 4. Skip (Ignore Records) --> Skip (Ignore Records)
+            // Better - filter early → less data processed
 
-            var skip = catalogData.Select(x => x.Price).Skip(3);
+            var resultRight = salesRegister
+                        .Where(x => x.Amount > 300)
+                        .Select(x => new { x.Customer, x.Amount });
 
-            // 5. Pagination (Skip + Take) 
+            // 5. N+1 Problem (Very Important for DB)
 
-            // PageNumber = 2
-            // PageSize = 2
-            // Skip = (PageNumber - 1) * PageSize
+            // Example
 
-            int pageNumber = 2;
-            int pageSize = 2;
+            var orders = _context.Orders.ToList();
 
-            var result = catalogData
-                        .OrderBy(x => x.Id)
-                        .Skip((pageNumber - 1) * pageSize)
-                        .Take(pageSize);
+            foreach (var order in orders)
+            {
+                // DB hit again and again 
+                var customer = _context.Customers.First(x => x.Id == order.CustomerId); // 
+            }
 
+            // Correct approach (join)
 
+            var resultJoin = _context.Orders.Join(_context.Customers, o => o.CustomerId, c => c.Id,
+                  (o, c) => new
+                              {
+                                  o.Id,
+                                  c.Name
+                              }).ToList();
 
+            // 6. Use FirstOrDefault() Safely
+
+            var item = salesRegister.First(x => x.Id == 10); // crash if not found
+
+            var itemFristorDefault = salesRegister.FirstOrDefault(x => x.Id == 10);
+
+            if (item != null)
+            {
+                Console.WriteLine(item.Customer);
+            }
+
+            // 7. Order of Operations Matters
+
+            // Order of Operations Matters
+
+            var resultOrderSequence = salesRegister
+                                    .Where(x => x.Amount > 300)
+                                    .OrderByDescending(x => x.Amount)
+                                    .Select(x => new
+                                    {
+                                        x.Customer,
+                                        x.Amount
+                                    })
+                                    .Take(3)
+                                    .ToList();
             // -------------------------------------------------------------------------------------------
             // -------------------------------------------------------------------------------------------
         }
@@ -899,6 +987,13 @@ namespace Learn_LINQ
             public string Name { get; set; }
             public double Price { get; set; }
             public double Rating { get; set; }
+        }
+
+        class OrderRecord
+        {
+            public int Id { get; set; }
+            public string Customer { get; set; }
+            public int Amount { get; set; }
         }
     }
 }
